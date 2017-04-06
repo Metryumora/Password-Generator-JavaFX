@@ -1,4 +1,4 @@
-package org.passgen;
+package net.explorator;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,12 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
 public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("view/mainFrame.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/passwordGenerator.fxml"));
         primaryStage.setTitle("Password Generator");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -19,6 +18,5 @@ public class Launcher extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        System.exit(0);
     }
 }

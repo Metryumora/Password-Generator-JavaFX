@@ -1,4 +1,4 @@
-package org.passgen.model;
+package net.explorator.model;
 
 /**
  * Created by Supreme on 03.06.2016.

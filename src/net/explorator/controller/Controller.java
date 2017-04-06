@@ -1,16 +1,16 @@
-package org.passgen.controller;
+package net.explorator.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import org.passgen.model.FileWorker;
-import org.passgen.model.PasswordAttributes;
+import net.explorator.model.PasswordFactory;
+import net.explorator.model.FileWorker;
+import net.explorator.model.PasswordAttributes;
 
 import java.awt.*;
-
-import static org.passgen.model.PasswordFactory.generateMultiplePasswords;
+import java.util.List;
 
 
 public class Controller {
@@ -37,12 +37,6 @@ public class Controller {
     Button generateButton;
 
     @FXML
-    public void updateTextArea() {
-        
-        generatePasswords();
-        passwordsTA.setText(passwords);
-    }
-
     private void generatePasswords() {
         PasswordAttributes attributes = new PasswordAttributes(
                 capitalCheckBox.isSelected(),
@@ -50,37 +44,38 @@ public class Controller {
                 numbersCheckBox.isSelected(),
                 symbolsCheckBox.isSelected()
         );
+
         int length = 0;
         try {
             length = Integer.parseInt(lengthTextField.getText());
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            System.out.println("Wrong password length typed");
         }
+
         int quantity = 0;
         try {
-            length = Integer.parseInt(quantityTextField.getText());
+            quantity = Integer.parseInt(quantityTextField.getText());
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            System.out.println("Wrong passwords' quantity typed");
         }
-        String passwordsArray[] = generateMultiplePasswords(attributes, length, quantity);
+
+        List<String> passwordsArray = PasswordFactory.generateMultiplePasswords(attributes, length, quantity);
         passwords = "";
         for (String password : passwordsArray) {
             passwords += password + "\n";
         }
+        passwordsTA.setText(passwords);
     }
 
     @FXML
     public void saveToFile() {
         FileDialog fileDialog = new FileDialog(new Frame(), "Save file as...", FileDialog.SAVE);
         fileDialog.setVisible(true);
-
         if (fileDialog.getDirectory() == null || fileDialog.getFile() == null) {
             System.out.println("No File Selected!!!");
         } else {
             String currDocPath = fileDialog.getDirectory() + fileDialog.getFile();
-            FileWorker.write(currDocPath + ".txt", passwordsTA.getText());
+            FileWorker.write(currDocPath + ".txt", passwords);
         }
     }
 

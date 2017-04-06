@@ -1,5 +1,7 @@
-package org.passgen.model;
+package net.explorator.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -38,10 +40,10 @@ public class PasswordFactory {
         return pass;
     }
 
-    public static String[] generateMultiplePasswords(PasswordAttributes attributes, int length, int quantity) {
-        String result[] = new String[quantity];
+    public static List<String> generateMultiplePasswords(PasswordAttributes attributes, int length, int quantity) {
+        List<String> result = new ArrayList<>(quantity);
         for (int i = 0; i < quantity; i++) {
-            result[i] = generatePassword(attributes, length);
+            result.add(generatePassword(attributes, length));
         }
         return result;
     }
