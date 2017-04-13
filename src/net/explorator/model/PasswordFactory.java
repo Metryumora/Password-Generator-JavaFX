@@ -13,7 +13,7 @@ public class PasswordFactory {
         String pass = "";
         Random random = new Random();
         if (attributes.attributesAreNotEmpty())
-            while (pass.length() <= length) {
+            while (pass.length() < length) {
                 switch (random.nextInt(4)) {
                     case 0: {
                         if (attributes.hasCapitalLetters())
