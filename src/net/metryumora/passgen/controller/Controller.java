@@ -15,18 +15,20 @@ import java.util.List;
 
 public class Controller {
 
+    private static final String DEFAULT_FILE_NAME = "passwords.txt";
+
     @FXML Button generateButton;
     @FXML Button saveButton;
     @FXML CheckBox smallCheckBox;
     @FXML CheckBox capitalCheckBox;
     @FXML CheckBox numbersCheckBox;
     @FXML CheckBox symbolsCheckBox;
-    @FXML TextField lengthTextField;
-    @FXML TextField quantityTextField;
+    @FXML TextField passwordLengthTF;
+    @FXML TextField passwordsNumberTF;
     @FXML TextArea passwordsTA;
 
     private int passwordLength = 0;
-    private int passwordsQuantity = 0;
+    private int passwordsNumber = 0;
 
     @FXML
     private void initialize() {
@@ -34,8 +36,8 @@ public class Controller {
         capitalCheckBox.setFocusTraversable(false);
         numbersCheckBox.setFocusTraversable(false);
         symbolsCheckBox.setFocusTraversable(false);
-        lengthTextField.setFocusTraversable(false);
-        quantityTextField.setFocusTraversable(false);
+        passwordLengthTF.setFocusTraversable(false);
+        passwordsNumberTF.setFocusTraversable(false);
 
         passwordsTA.setFocusTraversable(false);
 
@@ -56,28 +58,14 @@ public class Controller {
 
     @FXML
     private void generatePasswords() {
-        PasswordAttributes attributes = new PasswordAttributes(
-                capitalCheckBox.isSelected(),
-                smallCheckBox.isSelected(),
-                numbersCheckBox.isSelected(),
-                symbolsCheckBox.isSelected()
-        );
+        PasswordAttributes attributes = getPasswordAttributes();
+        setPasswordLength();
+        setPasswordsNumber();
+        generateAndShowPasswords(attributes);
+    }
 
-        try {
-            passwordLength = Integer.parseInt(lengthTextField.getText());
-        } catch (NumberFormatException e) {
-            passwordsTA.setText("Length should be a number grater than 0 :)");
-            lengthTextField.setText("20");
-        }
-
-        try {
-            passwordsQuantity = Integer.parseInt(quantityTextField.getText());
-        } catch (NumberFormatException e) {
-            passwordsTA.setText("Quantity should be a number grater than 0 :)");
-            quantityTextField.setText("1");
-        }
-
-        List<String> passwordsList = PasswordFactory.generateMultiplePasswords(attributes, passwordLength, passwordsQuantity);
+    private void generateAndShowPasswords(PasswordAttributes attributes) {
+        List<String> passwordsList = PasswordFactory.generateMultiplePasswords(attributes, passwordLength, passwordsNumber);
         StringBuilder passwords = new StringBuilder();
         for (String password : passwordsList) {
             passwords.append(password).append("\n");
@@ -85,19 +73,60 @@ public class Controller {
         passwordsTA.setText(passwords.toString());
     }
 
+    private void setPasswordsNumber() {
+        try {
+            passwordsNumber = Integer.parseInt(passwordsNumberTF.getText());
+        } catch (NumberFormatException e) {
+            passwordsTA.setText("Quantity should be a number grater than 0 :)");
+            passwordsNumberTF.setText("1");
+        }
+    }
+
+    private void setPasswordLength() {
+        try {
+            passwordLength = Integer.parseInt(passwordLengthTF.getText());
+        } catch (NumberFormatException e) {
+            passwordsTA.setText("Length should be a number grater than 0 :)");
+            passwordLengthTF.setText("20");
+        }
+    }
+
+    private PasswordAttributes getPasswordAttributes() {
+        return new PasswordAttributes(
+                    capitalCheckBox.isSelected(),
+                    smallCheckBox.isSelected(),
+                    numbersCheckBox.isSelected(),
+                    symbolsCheckBox.isSelected()
+            );
+    }
+
     @FXML
     public void saveToFile() {
-        Frame frame = new Frame();
-        frame.setLocationRelativeTo(null);
+        FileDialog fileDialog = createAndShowFileDialog();
+
+        if (hasProperFileChosen(fileDialog)) {
+            String currDocPath = fileDialog.getDirectory() + fileDialog.getFile();
+            FileWorker.write(currDocPath, passwordsTA.getText());
+        }
+    }
+
+    private boolean hasProperFileChosen(FileDialog fileDialog) {
+        return fileDialog.getDirectory() != null && fileDialog.getFile() != null;
+    }
+
+    private FileDialog createAndShowFileDialog() {
+        Frame frame = createCenteredFrame();
 
         FileDialog fileDialog = new FileDialog(frame, "Save file as...", FileDialog.SAVE);
-        fileDialog.setFile("passwords.txt");
+        fileDialog.setFile(DEFAULT_FILE_NAME);
         fileDialog.setVisible(true);
+        return fileDialog;
+    }
 
-        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
-            String currDocPath = fileDialog.getDirectory() + fileDialog.getFile();
-            FileWorker.write(currDocPath + ".txt", passwordsTA.getText());
-        }
+    private Frame createCenteredFrame() {
+        Frame frame = new Frame();
+        frame.setLocationRelativeTo(null);
+        return frame;
     }
 
     @FXML
