@@ -13,6 +13,7 @@ public class Launcher extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("view/passwordGenerator.fxml"));
         primaryStage.setTitle("Password Generator");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setOnCloseRequest(event -> primaryStage.close());
         primaryStage.show();
     }
 
