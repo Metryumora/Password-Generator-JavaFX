@@ -5,29 +5,54 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import net.metryumora.passgen.model.PasswordFactory;
+import javafx.scene.input.KeyEvent;
 import net.metryumora.passgen.model.FileWorker;
 import net.metryumora.passgen.model.PasswordAttributes;
+import net.metryumora.passgen.model.PasswordFactory;
 
 import java.awt.*;
 import java.util.List;
 
-
 public class Controller {
 
-    @FXML
-    CheckBox capitalCheckBox;
+    @FXML Button generateButton;
+    @FXML Button saveButton;
     @FXML CheckBox smallCheckBox;
+    @FXML CheckBox capitalCheckBox;
     @FXML CheckBox numbersCheckBox;
     @FXML CheckBox symbolsCheckBox;
     @FXML TextField lengthTextField;
     @FXML TextField quantityTextField;
     @FXML TextArea passwordsTA;
-    @FXML Button saveButton;
-    @FXML Button generateButton;
 
     private int passwordLength = 0;
     private int passwordsQuantity = 0;
+
+    @FXML
+    private void initialize() {
+        smallCheckBox.setFocusTraversable(false);
+        capitalCheckBox.setFocusTraversable(false);
+        numbersCheckBox.setFocusTraversable(false);
+        symbolsCheckBox.setFocusTraversable(false);
+        lengthTextField.setFocusTraversable(false);
+        quantityTextField.setFocusTraversable(false);
+
+        passwordsTA.setFocusTraversable(false);
+
+        generateButton.requestFocus();
+    }
+
+    @FXML
+    void handleKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
+            case S:
+                if (event.isControlDown()) {
+                    saveToFile();
+                }
+            default:
+                break;
+        }
+    }
 
     @FXML
     private void generatePasswords() {
@@ -62,11 +87,14 @@ public class Controller {
 
     @FXML
     public void saveToFile() {
-        FileDialog fileDialog = new FileDialog(new Frame(), "Save file as...", FileDialog.SAVE);
+        Frame frame = new Frame();
+        frame.setLocationRelativeTo(null);
+
+        FileDialog fileDialog = new FileDialog(frame, "Save file as...", FileDialog.SAVE);
+        fileDialog.setFile("passwords.txt");
         fileDialog.setVisible(true);
-        if (fileDialog.getDirectory() == null || fileDialog.getFile() == null) {
-            System.out.println("No File Selected!!!");
-        } else {
+
+        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
             String currDocPath = fileDialog.getDirectory() + fileDialog.getFile();
             FileWorker.write(currDocPath + ".txt", passwordsTA.getText());
         }
