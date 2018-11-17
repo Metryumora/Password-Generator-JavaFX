@@ -1,43 +1,40 @@
-package net.explorator.model;
+package net.metryumora.passgen.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by Supreme on 03.06.2016.
- */
 public class PasswordFactory {
 
     public static String generatePassword(PasswordAttributes attributes, int length) {
-        String pass = "";
+        StringBuilder pass = new StringBuilder();
         Random random = new Random();
-        if (attributes.attributesAreNotEmpty())
+        if (attributes.areNotEmpty())
             while (pass.length() < length) {
                 switch (random.nextInt(4)) {
                     case 0: {
                         if (attributes.hasCapitalLetters())
-                            pass += (char) (65 + random.nextInt(26));
+                            pass.append((char) (65 + random.nextInt(26)));
                         break;
                     }
                     case 1: {
                         if (attributes.hasSmallLetters())
-                            pass += (char) (97 + random.nextInt(26));
+                            pass.append((char) (97 + random.nextInt(26)));
                         break;
                     }
                     case 2: {
                         if (attributes.hasNumbers())
-                            pass += (random.nextInt(10));
+                            pass.append((random.nextInt(10)));
                         break;
                     }
                     case 3: {
                         if (attributes.hasSymbols())
-                            pass += (char) (33 + random.nextInt(15));
+                            pass.append((char) (33 + random.nextInt(15)));
                         break;
                     }
                 }
             }
-        return pass;
+        return pass.toString();
     }
 
     public static List<String> generateMultiplePasswords(PasswordAttributes attributes, int length, int quantity) {

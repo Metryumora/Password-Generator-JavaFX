@@ -1,4 +1,4 @@
-package net.explorator.model;
+package net.metryumora.passgen.model;
 
 import java.io.File;
 import java.io.IOException;

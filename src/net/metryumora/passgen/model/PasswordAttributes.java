@@ -1,16 +1,10 @@
-package net.explorator.model;
+package net.metryumora.passgen.model;
 
-/**
- * Created by Supreme on 03.06.2016.
- */
 public class PasswordAttributes {
 
     private boolean capitalLetters;
-
     private boolean smallLetters;
-
     private boolean numbers;
-
     private boolean symbols;
 
     public PasswordAttributes(boolean capitalLetters, boolean smallLetters, boolean numbers, boolean symbols) {
@@ -20,29 +14,23 @@ public class PasswordAttributes {
         this.symbols = symbols;
     }
 
-    public boolean hasCapitalLetters() {
+    boolean hasCapitalLetters() {
         return capitalLetters;
     }
 
-    public boolean hasSmallLetters() {
+    boolean hasSmallLetters() {
         return smallLetters;
     }
 
-    public boolean hasNumbers() {
+    boolean hasNumbers() {
         return numbers;
     }
 
-    public boolean hasSymbols() {
+    boolean hasSymbols() {
         return symbols;
     }
 
-    public boolean attributesAreNotEmpty() {
-        if (capitalLetters
-                || smallLetters
-                || numbers
-                || symbols
-                )
-            return true;
-        else return false;
+    boolean areNotEmpty() {
+        return capitalLetters || smallLetters || numbers || symbols;
     }
 }

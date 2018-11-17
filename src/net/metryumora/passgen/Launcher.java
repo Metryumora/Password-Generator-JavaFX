@@ -1,4 +1,4 @@
-package net.explorator;
+package net.metryumora.passgen;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
